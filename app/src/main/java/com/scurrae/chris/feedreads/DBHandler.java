@@ -143,8 +143,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void deleteAllContacts(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACTS,null,null);
-        db.execSQL("delete * from "+ TABLE_CONTACTS);
-        db.execSQL("TRUNCATE table" + TABLE_CONTACTS);
+        db.execSQL("delete from "+ TABLE_CONTACTS);
+        db.execSQL("TRUNCATE table " + TABLE_CONTACTS);
         db.close();
 
     }

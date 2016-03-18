@@ -16,8 +16,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete all contacts"
-        android:id="@+id/but"/>
+        android:text="Delete All Contacts"
+        android:id="@+id/del"
+        android:layout_below="@+id/but"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
