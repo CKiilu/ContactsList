@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,9 +15,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="number"
-        android:id="@+id/editnum"/>
+        android:id="@+id/editnum"
+        android:layout_below="@id/editname"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editnum"
+            android:layout_centerHorizontal="true">
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Done"/>
-</LinearLayout>
+        android:text="Cancel"
+        android:id="@+id/cancelbut"
+        />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/donebut"
+        android:layout_toRightOf="@id/cancelbut"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
