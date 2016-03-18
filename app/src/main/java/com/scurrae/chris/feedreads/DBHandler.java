@@ -37,7 +37,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // String containing all vars needed
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME +
-                " TEXT," + KEY_PH_NO + " TEXT," + ")";
+                " TEXT," + KEY_PH_NO + " TEXT" + ")";
         // Execute the string
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
@@ -88,7 +88,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<Contact> getAllContacts(){
         List<Contact> contactList = new ArrayList<Contact>();
         // Select All Query
-        String selectQuery = "SELECT * FROM" + TABLE_CONTACTS;
+        String selectQuery = "SELECT * FROM " + TABLE_CONTACTS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -110,7 +110,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     // To get total contacts
     public int getContactsCount(){
-        String countQuery = "SELECT * FROM" + TABLE_CONTACTS;
+        String countQuery = "SELECT * FROM " + TABLE_CONTACTS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery,  null);
         cursor.close();
