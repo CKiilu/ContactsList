@@ -108,4 +108,14 @@ public class DBHandler extends SQLiteOpenHelper {
         // Return contact list
         return contactList;
     }
+    // To get total contacts
+    public int getContactsCount(){
+        String countQuery = "SELECT * FROM" + TABLE_CONTACTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery,  null);
+        cursor.close();
+
+        // return count
+        return cursor.getCount();
+    }
 }
