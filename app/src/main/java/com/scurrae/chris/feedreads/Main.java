@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,10 +39,6 @@ public class Main extends AppCompatActivity {
 
         // CRUD
         Log.d("Insert: ", "Inserting ..");
-        db.addContact(new Contact("Ravi", "9100000000"));
-        db.addContact(new Contact("Srinivas", "9199999999"));
-        db.addContact(new Contact("Tommy", "9522222222"));
-        db.addContact(new Contact("Karthik", "9533333333"));
 
         // Read all contacts
         Log.d("Reading: ", "Reading all contacts..");
@@ -54,10 +51,15 @@ public class Main extends AppCompatActivity {
             Log.d("Name: ", log);
         }
 
+
+
         recyclerView = (RecyclerView)findViewById(R.id.recycler);
         adapter = new DBAdapter(getBaseContext(), contacts);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+
+        // Delete all function
+        // db.deleteAllContacts();
 
     }
 

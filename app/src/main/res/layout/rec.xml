@@ -13,9 +13,16 @@
         android:layout_height="wrap_content"
         android:text="Add Contact"
         android:id="@+id/but"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete all contacts"
+        android:id="@+id/but"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recycler"/>
+        android:id="@+id/recycler"
+        android:layout_below="@+id/del"
+        />
 </RelativeLayout>
