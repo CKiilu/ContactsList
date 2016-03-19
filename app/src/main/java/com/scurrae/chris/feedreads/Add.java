@@ -8,10 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.firebase.client.Firebase;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by chris on 3/18/16.
  */
 public class Add extends AppCompatActivity {
+
+    private Map<String, String> contact = new HashMap<String, String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +31,10 @@ public class Add extends AppCompatActivity {
         final EditText num = (EditText)findViewById(R.id.editnum);
         Button c = (Button)findViewById(R.id.cancelbut);
         Button d = (Button)findViewById(R.id.donebut);
+        Firebase myFirebaseRef = new Firebase("https://shortshotie.firebaseio.com/");
+        Firebase.setAndroidContext(this);
+        final Firebase contactRef = myFirebaseRef.child("contacts");
+        final Firebase contactId = contactRef.push();
 
         // Create button array
         final Button[] bArray = {c, d};
@@ -35,19 +47,26 @@ public class Add extends AppCompatActivity {
                         switch (v.getId()){
                             // Cancel button
                             case R.id.cancelbut:
-                                finish();
+                                try {
+                                    finish();
+                                } catch (NullPointerException e){
+                                    e.printStackTrace();
+                                } finally {
+                                    finish();
+                                }
                                 break;
                             // done button
                             case R.id.donebut:
                                 String person = String.valueOf(name.getText());
                                 String phone = String.valueOf(num.getText());
+//                                if(person != null && phone != null) {
+//                                    contact.put(person, phone);
+//                                    contactId.setValue(contact);
+//                                }
                                 if(person != null && phone != null) {
-                                    Intent i = new Intent();
-                                    i.putExtra("Name", person);
-                                    i.putExtra("Phone_Number", phone);
-                                    setResult(RESULT_OK, i);
+                                    contactRef.child(person).setValue(phone);
                                 }
-                                finish();
+                                    finish();
                                 break;
                             default:
                                 break;

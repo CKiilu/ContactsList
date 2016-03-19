@@ -15,11 +15,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by chris on 3/18/16.
@@ -29,15 +35,29 @@ public class Main extends AppCompatActivity {
     private DBAdapter adapter;
     private Button button;
     private Button button2;
-    private List<Contact> contacts = new ArrayList<>();
+    List<Contact> contacts = new ArrayList<>();
+    private Firebase myFirebaseRef = new Firebase("https://shortshotie.firebaseio.com/");
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        String nameSentBack = data.getStringExtra("Name");
-        String numSentBack = data.getStringExtra("Phone_Number");
-        contacts.add(new Contact(nameSentBack, numSentBack));
+    private Firebase contactRef = myFirebaseRef.child("contacts");
+
+    private List<Contact> getData(){
+        // Firebase get call
+        contactRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot d:dataSnapshot.getChildren()){
+                    contacts.add(new Contact(d.getKey(), (String)d.getValue()));
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        return contacts;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +71,7 @@ public class Main extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(),
-                        Add.class);
-                final int result = 1;
-                i.putExtra("addNew", "Main");
-                startActivityForResult(i, result);
+                startActivity(new Intent(getBaseContext(), Add.class));
             }
         });
 
@@ -96,7 +112,7 @@ public class Main extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler);
-        adapter = new DBAdapter(getBaseContext(), contacts);
+        adapter = new DBAdapter(getBaseContext(), getData());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
