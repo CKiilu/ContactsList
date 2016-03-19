@@ -23,7 +23,6 @@ public class Add extends AppCompatActivity {
         final EditText num = (EditText)findViewById(R.id.editnum);
         Button c = (Button)findViewById(R.id.cancelbut);
         Button d = (Button)findViewById(R.id.donebut);
-        final DBHandler db = new DBHandler(getBaseContext());
 
         // Create button array
         final Button[] bArray = {c, d};
@@ -36,16 +35,19 @@ public class Add extends AppCompatActivity {
                         switch (v.getId()){
                             // Cancel button
                             case R.id.cancelbut:
-                                startActivity(new Intent(getBaseContext(), Main.class));
+                                finish();
                                 break;
                             // done button
                             case R.id.donebut:
                                 String person = String.valueOf(name.getText());
                                 String phone = String.valueOf(num.getText());
                                 if(person != null && phone != null) {
-                                    db.addContact(new Contact(person, phone));
+                                    Intent i = new Intent();
+                                    i.putExtra("Name", person);
+                                    i.putExtra("Phone_Number", phone);
+                                    setResult(RESULT_OK, i);
                                 }
-                                startActivity(new Intent(getBaseContext(), Main.class));
+                                finish();
                                 break;
                             default:
                                 break;
@@ -56,9 +58,5 @@ public class Add extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
-    }
+
 }

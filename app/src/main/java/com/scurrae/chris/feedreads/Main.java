@@ -12,9 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,30 +29,45 @@ public class Main extends AppCompatActivity {
     private DBAdapter adapter;
     private Button button;
     private Button button2;
+    private List<Contact> contacts = new ArrayList<>();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String nameSentBack = data.getStringExtra("Name");
+        String numSentBack = data.getStringExtra("Phone_Number");
+        contacts.add(new Contact(nameSentBack, numSentBack));
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rec);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        Firebase.setAndroidContext(this);
+
         button = (Button)findViewById(R.id.but);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), Add.class));
+                Intent i = new Intent(getBaseContext(),
+                        Add.class);
+                final int result = 1;
+                i.putExtra("addNew", "Main");
+                startActivityForResult(i, result);
             }
         });
-
-        // DBHandler instance
-        final DBHandler db = new DBHandler(this);
 
         button2 = (Button)findViewById(R.id.del);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    db.deleteAllContacts();
-                } catch (SQLiteException e){
+                    for (Contact a : contacts) {
+                        contacts.remove(a);
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     setContentView(R.layout.rec);
@@ -59,13 +78,16 @@ public class Main extends AppCompatActivity {
 
         // CRUD
         Log.d("Insert: ", "Inserting ..");
+        contacts.add(new Contact("Job", "09876532"));
+
 
         // Read all contacts
         Log.d("Reading: ", "Reading all contacts..");
-        List <Contact> contacts = db.getAllContacts();
+
+
 
         for(Contact cn:contacts){
-            String log = "Id: " + cn.get_id() + " , Name: " + cn.get_name() +
+            String log = "Name: " + cn.get_name() +
               " Phone: " + cn.get_phone_number();
 
             Log.d("Name: ", log);

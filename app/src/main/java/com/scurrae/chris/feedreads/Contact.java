@@ -3,6 +3,8 @@ package com.scurrae.chris.feedreads;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.firebase.client.Firebase;
+
 public class Contact {
     // private vars
     int _id;
@@ -49,3 +51,5 @@ public class Contact {
         this._phone_number = _phone_number;
     }
 }
+
+

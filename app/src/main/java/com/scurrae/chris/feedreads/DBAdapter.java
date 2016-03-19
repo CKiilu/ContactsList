@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ import java.util.List;
 public class DBAdapter extends RecyclerView.Adapter<DBAdapter.MyViewHolder> {
     private LayoutInflater inflater;
     List<Contact> data = new ArrayList<>();
+    Firebase ref = new Firebase("https://shortshotie.firebaseio.com");
+    Firebase contactRef = ref.child("contacts");
 
     public DBAdapter(Context context, List<Contact> data){
         inflater = LayoutInflater.from(context);
@@ -33,6 +37,9 @@ public class DBAdapter extends RecyclerView.Adapter<DBAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Contact current = data.get(position);
+        Contact up = new Contact(current.get_name(), current.get_phone_number());
+        contactRef.setValue(up);
+
         holder.textView.setText(current.get_name());
         holder.imageView.setText(current.get_phone_number());
 
