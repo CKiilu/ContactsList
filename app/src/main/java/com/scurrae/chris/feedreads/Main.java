@@ -36,27 +36,6 @@ public class Main extends AppCompatActivity {
     private Button button;
     private Button button2;
     List<Contact> contacts = new ArrayList<>();
-    private Firebase myFirebaseRef = new Firebase("https://shortshotie.firebaseio.com/");
-
-    private Firebase contactRef = myFirebaseRef.child("contacts");
-
-    private List<Contact> getData(){
-        // Firebase get call
-        contactRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot d:dataSnapshot.getChildren()){
-                    contacts.add(new Contact(d.getKey(), (String)d.getValue()));
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-        return contacts;
-    }
 
 
     @Override
@@ -66,6 +45,28 @@ public class Main extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Firebase.setAndroidContext(this);
+
+
+        Firebase myFirebaseRef = new Firebase("https://shortshotie.firebaseio.com/");
+
+        final Firebase contactRef = myFirebaseRef.child("contacts");
+
+        contactRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                contacts.clear();
+                for(DataSnapshot d:dataSnapshot.getChildren()) {
+                    contacts.add(new Contact(d.getKey(), d.getValue(String.class)));
+                    adapter.notifyDataSetChanged();
+                }
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         button = (Button)findViewById(R.id.but);
         button.setOnClickListener(new View.OnClickListener() {
@@ -80,13 +81,13 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    for (Contact a : contacts) {
-                        contacts.remove(a);
-                    }
+                    contactRef.removeValue();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    setContentView(R.layout.rec);
+                    finish();
+                    Toast.makeText(getBaseContext(), "Deleting Contacts...", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getBaseContext(), Main.class));
                 }
 
             }
@@ -94,7 +95,7 @@ public class Main extends AppCompatActivity {
 
         // CRUD
         Log.d("Insert: ", "Inserting ..");
-        contacts.add(new Contact("Job", "09876532"));
+//        getData();
 
 
         // Read all contacts
@@ -112,12 +113,29 @@ public class Main extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler);
-        adapter = new DBAdapter(getBaseContext(), getData());
+        adapter = new DBAdapter(getBaseContext(), contacts);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
 
 
     }
+//    private List<Contact> getData(){
+//        // Firebase get call
+//        contactRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot d:dataSnapshot.getChildren()){
+//                    contacts.add(new Contact(d.getKey(), (String)d.getValue()));
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+//        return contacts;
+//    }
 
 }

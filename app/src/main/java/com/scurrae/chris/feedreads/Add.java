@@ -24,6 +24,7 @@ public class Add extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add);
+        Firebase.setAndroidContext(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Call views, db and buttons
@@ -32,7 +33,6 @@ public class Add extends AppCompatActivity {
         Button c = (Button)findViewById(R.id.cancelbut);
         Button d = (Button)findViewById(R.id.donebut);
         Firebase myFirebaseRef = new Firebase("https://shortshotie.firebaseio.com/");
-        Firebase.setAndroidContext(this);
         final Firebase contactRef = myFirebaseRef.child("contacts");
         final Firebase contactId = contactRef.push();
 
